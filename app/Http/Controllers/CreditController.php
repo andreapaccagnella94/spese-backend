@@ -50,7 +50,7 @@ class CreditController extends Controller
         // Aggiorna il saldo dell'account (aggiungi l'accredito)
         $account->increment('balance', $validated['amount']);
 
-        return redirect()->route('accounts.index')
+        return redirect()->route('accounts.show', $account->id)
             ->with('success', 'Accredito creato con successo!');
     }
 
@@ -83,7 +83,7 @@ class CreditController extends Controller
         // Aggiorna il saldo dell'account (aggiungi l'accredito)
         $account->increment('balance', $extracted['amount']);
 
-        return redirect()->route('accounts.index')
+        return redirect()->route('accounts.show', $account->id)
             ->with('success', 'Accredito creato automaticamente dall\'AI!');
     }
 

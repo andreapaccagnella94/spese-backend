@@ -50,7 +50,7 @@ class ExpenseController extends Controller
         // Aggiorna il saldo dell'account (sottrai la spesa)
         $account->decrement('balance', $validated['amount']);
 
-        return redirect()->route('accounts.index')
+        return redirect()->route('accounts.show', $account->id)
             ->with('success', 'Spesa creata con successo!');
     }
 
@@ -83,7 +83,7 @@ class ExpenseController extends Controller
         // Aggiorna il saldo dell'account (sottrai la spesa)
         $account->decrement('balance', $extracted['amount']);
 
-        return redirect()->route('accounts.index')
+        return redirect()->route('accounts.show', $account->id)
             ->with('success', 'Spesa creata automaticamente dall\'AI!');
     }
 
