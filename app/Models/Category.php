@@ -15,4 +15,9 @@ class Category extends Model
     {
         return $this->hasMany(Expense::class);
     }
+
+    public function credits()
+    {
+        return $this->hasMany(Credit::class);
+    }
 }
