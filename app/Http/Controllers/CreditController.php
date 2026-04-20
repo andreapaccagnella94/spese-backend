@@ -9,7 +9,7 @@ use App\Models\TransactionImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use thiagoalessio\tesseract_ocr\TesseractOCR;
+use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class CreditController extends Controller
 {
@@ -112,8 +112,12 @@ class CreditController extends Controller
 
         try {
             // Esegui OCR con Tesseract
-            $ocr = TesseractOCR::image($fullPath)
-                ->lang('ita');
+            $ocr = new TesseractOCR($fullPath);
+            $tesseractPath = env('TESSERACT_PATH');
+            if ($tesseractPath) {
+                $ocr->executable($tesseractPath);
+            }
+            $ocr->lang('ita');
 
             $text = $ocr->run();
 

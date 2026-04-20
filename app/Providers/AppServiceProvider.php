@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-// use thiagoalessio\tesseract_ocr\TesseractOCR;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,12 +17,9 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    /*  public function boot(): void
+    public function boot(): void
     {
-        // Configura il percorso di Tesseract se specificato nelle variabili d'ambiente
-        $tesseractPath = env('TESSERACT_PATH');
-        if ($tesseractPath) {
-            TesseractOCR::setTesseractPath($tesseractPath);
-        }
-    } */
+        // No global static setter available in the TesseractOCR library.
+        // Controllers will set the executable per-instance using env('TESSERACT_PATH').
+    }
 }
