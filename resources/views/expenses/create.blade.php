@@ -88,19 +88,19 @@
             </div>
         </div>
 
-        <!-- Form AI -->
+        <!-- Form AI OCR -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Inserimento con AI</h5>
+                    <h5 class="mb-0">Inserimento con OCR</h5>
                 </div>
                 <div class="card-body">
                     <p class="text-muted">
-                        Scrivi una descrizione naturale, ad esempio:<br>
-                        <em>"spesa supermercato 50€"</em> o <em>"benzina 45.50€"</em>
+                        Carica uno screenshot o notifica dalla tua app bancaria.<br>
+                        L'AI estrarrà automaticamente importo, data e categoria.
                     </p>
 
-                    <form method="POST" action="{{ route('expenses.store.ai') }}">
+                    <form method="POST" action="{{ route('expenses.store.ai') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-3">
@@ -116,16 +116,25 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Descrizione</label>
+                            <label class="form-label">Immagine transazione</label>
+                            <input type="file"
+                                   name="transaction_image"
+                                   class="form-control"
+                                   accept="image/*"
+                                   required>
+                            <small class="text-muted">Formati supportati: JPG, PNG, GIF (max 5MB)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Oppure descrizione testuale</label>
                             <textarea name="ai_description"
                                       class="form-control"
-                                      rows="3"
-                                      placeholder="Es: spesa supermercato 50€"
-                                      required>{{ old('ai_description') }}</textarea>
+                                      rows="2"
+                                      placeholder="Es: spesa supermercato 50€">{{ old('ai_description') }}</textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary">
-                            Crea con AI
+                            Estrai con OCR
                         </button>
                     </form>
                 </div>
