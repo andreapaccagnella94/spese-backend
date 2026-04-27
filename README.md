@@ -1,66 +1,105 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Spese Backend - Laravel Expense Tracker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Applicazione Laravel 11 per il tracciamento delle spese personali con riconoscimento intelligente delle transazioni.
 
-## About Laravel
+## Deploy su Railway.app
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Passaggi per il deploy:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. **Pusha il codice su GitHub**
+   ```bash
+   git add .
+   git commit -m "Prepare for Railway deploy"
+   git push origin main
+   ```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+2. **Connetti Railway a GitHub**
+   - Vai su https://railway.app
+   - Login con GitHub
+   - Clicca "New Project" → "Deploy from GitHub repo"
+   - Seleziona questo repository
 
-## Learning Laravel
+3. **Aggiungi il database PostgreSQL**
+   - Nel progetto Railway, clicca "+ New" → "Database" → "PostgreSQL"
+   - Railway creerà automaticamente le variabili d'ambiente `DATABASE_URL`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+4. **Configura le variabili d'ambiente**
+   Aggiungi queste variabili in Railway (Settings → Variables):
+   ```
+   APP_NAME=Spese Backend
+   APP_ENV=production
+   APP_DEBUG=false
+   APP_URL=https://your-app.railway.app
+   SESSION_DRIVER=cookie
+   SESSION_SECURE_COOKIE=true
+   CACHE_DRIVER=database
+   QUEUE_CONNECTION=sync
+   ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+5. **Deploy automatico**
+   - Railway deployerà automaticamente ad ogni push su main
+   - Il primo deploy può richiedere 2-3 minuti
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+6. **Esegui le migrazioni**
+   Dopo il primo deploy, apri i Logs ed esegui:
+   ```bash
+   php artisan migrate --force
+   php artisan db:seed --class=CategorySeeder
+   php artisan key:generate --show
+   ```
+   
+   Copia la APP_KEY generata e aggiungila alle variabili d'ambiente in Railway.
 
-## Laravel Sponsors
+### Comandi utili
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+# Locale
+php artisan serve
+php artisan migrate
+php artisan db:seed --class=CategorySeeder
 
-### Premium Partners
+# Production (via Railway CLI)
+railway run php artisan migrate --force
+railway run php artisan db:seed --class=CategorySeeder
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Sviluppo Locale
 
-## Contributing
+### Requisiti
+- PHP 8.2+
+- Composer
+- SQLite o PostgreSQL
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Installazione
 
-## Code of Conduct
+```bash
+# Installa dipendenze
+composer install
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Copia ambiente
+cp .env.example .env
 
-## Security Vulnerabilities
+# Genera chiave app
+php artisan key:generate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Esegui migrazioni
+php artisan migrate
+php artisan db:seed --class=CategorySeeder
 
-## License
+# Avvia server
+php artisan serve
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Funzionalità
+
+- **Gestione conti**: Crea e gestisci múltiples conti correnti
+- **Spese**: Registra spese manualmente o con AI (riconoscimento da descrizione testuale)
+- **Accrediti**: Registra entrate con riconoscimento AI
+- **Categorie**: 8 categorie predefinite (Alimentari, Trasporti, Casa, Svago, Salute, Vestiti, Regali, Altro)
+- **Riconoscimento AI**: L'AI estrae automaticamente importo e categoria dalla descrizione testuale
+
+## Note
+
+- OCR immagini rimosso per semplificare il deploy cloud
+- Sessioni configurate con cookie per production
+- Database PostgreSQL compatibile con Railway

@@ -1,0 +1,11 @@
+[phases.install]
+cmds = ["composer install --no-dev --optimize-autoloader"]
+
+[phases.build]
+cmds = [
+  "mkdir -p /assets",
+  "php artisan storage:link"
+]
+
+[start]
+cmd = "php artisan migrate --force && php artisan serve --host 0.0.0.0 --port=$PORT"

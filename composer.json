@@ -9,8 +9,7 @@
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.6",
-        "pacificdev/laravel_9_preset": "^2.0",
-        "thiagoalessio/tesseract_ocr": "*"
+        "pacificdev/laravel_9_preset": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
